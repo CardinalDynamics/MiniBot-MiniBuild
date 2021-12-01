@@ -7,19 +7,13 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj.Spark;
-//import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
-//import edu.wpi.first.wpilibj.MotorSafety;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PWMVictorSPX;
 import edu.wpi.first.wpilibj.PWMTalonSRX;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
-//import edu.wpi.first.wpilibj.PWMSparkMax;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -30,42 +24,22 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 public class Robot extends TimedRobot
 {
   // Motor Controllers
-  //private final Spark m_leftMotor = new Spark(0);
- //private final Spark m_rightMotor = new Spark(1);
- // private final PWMTalonSRX m_talon = new PWMTalonSRX(1);
-  //private final PWMVictorSPX m_victor = new PWMVictorSPX(2);
-  //private final PWMSparkMax m_sparkMax = new PWMSparkMax(3);
   private final PWMVictorSPX m_frontLeft = new PWMVictorSPX(0);
   private final PWMVictorSPX m_backLeft = new PWMVictorSPX(1);
   private final PWMVictorSPX m_frontRight = new PWMVictorSPX(2);
   private final PWMVictorSPX m_backRight = new PWMVictorSPX(3);
-  SpeedControllerGroup m_left = new SpeedControllerGroup(m_frontLeft, m_backLeft);
-  SpeedControllerGroup m_right = new SpeedControllerGroup(m_frontRight, m_backRight);
-  // Autonomous Settings
-  private static final String kDefaultAuto = "Default";
-  private static final String kCustomAuto = "My Auto";
-
-  // Other Things? (Alex help me out)
-  private String m_autoSelected;
-  private final SendableChooser<String> m_chooser = new SendableChooser<>();
-  //private final DifferentialDrive m_robotDrive = new DifferentialDrive(m_leftMotor, m_rightMotor); 
   private final XboxController m_controller = new XboxController(0);
   private DifferentialDrive m_myRobot;
-
-
-
+  SpeedControllerGroup m_left = new SpeedControllerGroup(m_frontLeft, m_backLeft);
+  SpeedControllerGroup m_right = new SpeedControllerGroup(m_frontRight, m_backRight);
+ 
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
   @Override
   public void robotInit() {
-    m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
-    m_chooser.addOption("My Auto", kCustomAuto);
-    SmartDashboard.putData("Auto choices", m_chooser);
-    SmartDashboard.putNumber("Uptime", Timer.getFPGATimestamp());
-
-
+  
     // Tank drive (left motor, right motor)
     m_myRobot  = new DifferentialDrive(m_left, m_right);
   }
@@ -92,23 +66,13 @@ public class Robot extends TimedRobot
    */
   @Override
   public void autonomousInit() {
-    m_autoSelected = m_chooser.getSelected();
-    // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
-    System.out.println("Auto selected: " + m_autoSelected);
+  
   }
 
   /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {
-    switch (m_autoSelected) {
-      case kCustomAuto:
-        // Put custom auto code here
-        break;
-      case kDefaultAuto:
-      default:
-        
-        break;
-    }
+   
   }
 
   /** This function is called once when teleop is enabled. */
@@ -120,7 +84,10 @@ public class Robot extends TimedRobot
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    m_myRobot.tankDrive(m_controller.getY(GenericHID.Hand.kLeft), m_controller.getY(GenericHID.Hand.kRight));
+    //m_robotDrive.arcadeDrive(m_controller.getY(GenericHID.Hand.kLeft), m_controller.getX(GenericHID.Hand.kLeft));
+  }
 
   /** This function is called once when the robot is disabled. */
   @Override
@@ -141,7 +108,6 @@ public class Robot extends TimedRobot
   @Override
   public void testPeriodic() 
   {
-  
     m_myRobot.tankDrive(m_controller.getY(GenericHID.Hand.kLeft), m_controller.getY(GenericHID.Hand.kRight));
     //m_robotDrive.arcadeDrive(m_controller.getY(GenericHID.Hand.kLeft), m_controller.getX(GenericHID.Hand.kLeft));
   }
