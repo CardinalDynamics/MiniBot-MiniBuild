@@ -126,7 +126,7 @@ public class Robot extends TimedRobot {
     if (drive == true) {
       m_drive1.tankDrive(m_controller.getY(GenericHID.Hand.kLeft), m_controller.getY(GenericHID.Hand.kRight));
     } else {
-      m_drive1.arcadeDrive(m_controller.getY(GenericHID.Hand.kLeft), m_controller.getX(GenericHID.Hand.kLeft));
+      m_drive1.arcadeDrive(m_controller.getY(GenericHID.Hand.kLeft), -m_controller.getX(GenericHID.Hand.kLeft));
     }
   }
 
